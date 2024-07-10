@@ -7,6 +7,7 @@ const Location = () => {
   const [location, setLocation] = useState({ lat: null, lon: null });
   const [error, setError] = useState(null);
   const [deviceDetails, setDeviceDetails] = useState(null);
+  const [deviceModel, setDeviceModel] = useState(null);
 
   useEffect(() => {
     // Get geolocation
@@ -30,6 +31,12 @@ const Location = () => {
     const parser = new UAParser();
     const result = parser.getResult();
     setDeviceDetails(result);
+
+    // Determine the device model (if available)
+    const deviceModel = `${result.device.vendor || ''} ${
+      result.device.model || ''
+    }`.trim();
+    setDeviceModel(deviceModel || 'Unknown Device Model');
   }, []);
 
   return (
@@ -58,6 +65,10 @@ const Location = () => {
         <h3 className="section-title">Device Details</h3>
         <table className="data-table">
           <tbody>
+            <tr>
+              <th>Device Model</th>
+              <td>{deviceModel}</td>
+            </tr>
             {deviceDetails &&
               Object.entries(deviceDetails).map(([key, value]) => (
                 <tr key={key}>
