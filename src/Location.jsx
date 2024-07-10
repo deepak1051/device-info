@@ -11,21 +11,26 @@ const Location = () => {
 
   useEffect(() => {
     // Get geolocation
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          });
-        },
-        (error) => {
-          setError(error.message);
-        }
-      );
-    } else {
-      setError('Geolocation is not supported by this browser.');
-    }
+    const getLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLocation({
+              lat: position.coords.latitude,
+              lon: position.coords.longitude,
+            });
+          },
+          (error) => {
+            setError(error.message);
+          },
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+        );
+      } else {
+        setError('Geolocation is not supported by this browser.');
+      }
+    };
+
+    getLocation();
 
     // Get device details
     const parser = new UAParser();
