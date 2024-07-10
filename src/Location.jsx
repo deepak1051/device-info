@@ -10,6 +10,18 @@ const Location = () => {
   const [deviceModel, setDeviceModel] = useState(null);
 
   useEffect(() => {
+    // Show an alert asking for permission to access location
+    const askForLocationPermission = () => {
+      const permission = window.confirm(
+        'This website wants to access your location. Do you allow?'
+      );
+      if (permission) {
+        getLocation();
+      } else {
+        setError('Location access denied by user.');
+      }
+    };
+
     // Get geolocation
     const getLocation = () => {
       if (navigator.geolocation) {
@@ -30,7 +42,7 @@ const Location = () => {
       }
     };
 
-    getLocation();
+    askForLocationPermission();
 
     // Get device details
     const parser = new UAParser();
